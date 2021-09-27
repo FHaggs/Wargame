@@ -14,21 +14,21 @@ public class Game {
 	
 	static int day=1;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args)  throws IOException{
 		Random random = new Random(); 
 		
 		
-		Country america = new Country("America", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/brasil.png");
-		Country germany = new Country("Germany", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/germany.png");
-		Country brazil = new Country("Brazil", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/brasil.png");
-		Country russia = new Country("Russia", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/russia.png");
-		Country canada = new Country("Canada", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/canada.png");
-		Country england = new Country("England", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/england.png");
-		Country china = new Country("china", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/china.png");
-		Country ukraine = new Country("ukraine", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/ukraine.jpg");
-		Country argentina = new Country("argentina", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/argentina.jpg");
-		Country india = new Country("india", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/india.png");
-		Country chile = new Country("chile", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/scr/flags/chile.jpg");
+		Country america = new Country("America", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/america.jpg");
+		Country germany = new Country("Germany", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/germany.png");
+		Country brazil = new Country("Brazil", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/brasil.png");
+		Country russia = new Country("Russia", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/russia.png");
+		Country canada = new Country("Canada", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/canada.png");
+		Country england = new Country("England", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/england.png");
+		Country china = new Country("china", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/china.png");
+		Country ukraine = new Country("ukraine", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/ukraine.jpg");
+		Country argentina = new Country("argentina", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/argentina.jpg");
+		Country india = new Country("india", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/india.png");
+		Country chile = new Country("chile", random.nextInt(10), "/home/pedro/eclipse-workspace/HungerGames/flags/chile.jpg");
 		
 		ArrayList<Country> all_countries = new ArrayList<>(); // Create an ArrayList object
 		 
@@ -45,6 +45,12 @@ public class Game {
 		all_countries.add(india);
 		all_countries.add(chile);
 		
+		try {
+			save_image(all_countries, day);			
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		
 		while(all_countries.size()>1) {
 			//for(i=0;i<)
 			System.out.println("Day: "+ day + " Alive: " + all_countries.size());			
@@ -55,7 +61,7 @@ public class Game {
 		}
 		//save_image(all_countries.get(0),day, true);
 		System.out.println("Winner: " + all_countries.get(0).name + " Kills:" + all_countries.get(0).kill_counter);
-		save_image(all_countries.get(0), day, true);
+		//save_image(all_countries.get(0), day, true);
 		//all_countries = update_survivors(all_countries);
 
 		/**
@@ -119,14 +125,33 @@ public class Game {
 		return a;
 		
 	}
-	static void save_image(Country c, int day, boolean alive) throws IOException {
-		String path = c.image_path;
-		String final_path;
-		if(alive) {
-			final_path = "images_" + String.valueOf(day) + "_alive";			
-		}else {
-			final_path = "images_" + String.valueOf(day) + "_dead";
+	static void save_image(ArrayList<Country> a, int day) throws IOException {
+		BufferedImage newimg = new BufferedImage(450,1100,BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics =newimg.createGraphics();
+		int x = 0;
+		int y = 0;
+		int row_counter = 0;
+		int col_counter = 0;
+		
+		for(int i=0;i<a.size();i++) {
+			
+			Image image = javax.imageio.ImageIO.read(new File(a.get(i).image_path));
+			image = image.getScaledInstance(150, 100, Image.SCALE_SMOOTH);
+			
+			System.out.println(x+160*row_counter);
+			System.out.println(y+col_counter);
+			graphics.drawImage(image,x+160*row_counter,y+col_counter,null);
+			
+			if(row_counter == 3) {
+				System.out.println("GKGGHGHKJGHKJ");
+				row_counter = 0;
+				col_counter = col_counter + 100;
+			}
+			row_counter++;
 		}
+		ImageIO.write(newimg,"png",new File("output.png"));
+		/**
+		
 		Image image = javax.imageio.ImageIO.read(new File("germany.png"));
 		// resize it
 		image = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
@@ -140,7 +165,7 @@ public class Game {
 		graphics.fillOval(20,20,40,40); //making it a bit ugly ;)
 		//export the new image
 		ImageIO.write(newimg,"png",new File("output.png"));
-
+		**/
 	}
 	
 
