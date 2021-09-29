@@ -1,5 +1,3 @@
-//package HungerGames.scr;
-import java.util.Random;
 
 
 public class Country {
@@ -24,15 +22,14 @@ public class Country {
 	}
 	
 	public void kill(Country p) {
-		if(this.team == null || this.team != p.team) {
+		if(this.team == null || this.team != p.team && this.name != p.name) {
 			System.out.println(this.name + " Killed: " + p.name);
 			this.kill_counter++;
 			p.is_alive = false;				
 		}
 	}
-	public void join_team() {
-		int rand_int = new Random().nextInt(Team.values().length);
-		this.team = Team.values()[rand_int];
+	public void join_team(Team rand_team) {
+			this.team = rand_team;
 	}
 	public void change_strength(int random_num) {
 		String msg1 = " :General has been killed, -1 point of strength: ";
